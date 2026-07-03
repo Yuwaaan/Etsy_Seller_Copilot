@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Local data
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Type checking / linting caches
+.mypy_cache/
+.ruff_cache/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
