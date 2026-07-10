@@ -114,7 +114,12 @@ class _FailingChatModel:
 
 class TestGraphWithLLMConfigured:
     def test_uses_business_analyst_agent_when_llm_is_available(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        fake_llm = _FakeChatModel([AIMessage(content="Your shop is trending up this month.")])
+        fake_llm = _FakeChatModel(
+            [
+                AIMessage(content="This asks about overall performance; I have enough context to answer."),
+                AIMessage(content="Your shop is trending up this month."),
+            ]
+        )
         monkeypatch.setattr("etsy_seller_copilot.agents.business_analyst.get_chat_model", lambda: fake_llm)
 
         graph = build_graph()
