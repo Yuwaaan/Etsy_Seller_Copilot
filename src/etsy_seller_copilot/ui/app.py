@@ -5,6 +5,8 @@ CSV (or load bundled sample data), see headline metrics, top products, and a
 sales-trend chart, then ask free-form questions through the LangGraph agent.
 """
 
+import subprocess
+
 import streamlit as st
 
 from etsy_seller_copilot.agents.graph import build_graph
@@ -28,6 +30,23 @@ def get_graph():
     return build_graph()
 
 
+@st.cache_resource
+def get_git_commit_hash() -> str:
+    """Return the short git commit hash of the running deployment, for verifying
+    which version is live. TEMPORARY: remove once deployment verification is done."""
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "--short", "HEAD"],
+            capture_output=True,
+            text=True,
+            timeout=5,
+            check=True,
+        )
+        return result.stdout.strip()
+    except Exception:
+        return "unknown"
+
+
 def _load_orders() -> tuple:
     """Return (orders, warnings) from the uploaded file or sample data, or None."""
     uploaded_file = render_file_uploader()
@@ -49,6 +68,7 @@ def _load_orders() -> tuple:
 
 def main() -> None:
     st.set_page_config(page_title="EtsySellerCopilot", layout="wide")
+    st.sidebar.caption(f"Version: {get_git_commit_hash()}")
     st.title("EtsySellerCopilot")
     st.write(
         "Upload your Etsy **Sold Orders** CSV export (Shop Manager > Settings > "
